@@ -72,7 +72,7 @@ If you have an existing project you want to convert to use django-emailuser, you
         ...
         $
 
-[generic foreign keys]: https://docs.djangoproject.com/en/1.6/ref/contrib/contenttypes/#generic-relations
+[generic foreign keys]: https://docs.djangoproject.com/en/1.6/ref/contrib/contenttypes/#id1
 [content type]: https://docs.djangoproject.com/en/1.6/ref/contrib/contenttypes/
 
 
