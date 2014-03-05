@@ -1,4 +1,6 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.conf import settings
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+    Group, Permission, PermissionsMixin)
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -25,7 +27,34 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class CoextantPermissionsMixin(models.Model):
+
+    """A mixin class to provide fields compatible with Django's ModelBackend
+    permissions model, but with different related names so inheritors can
+    coexist with the active User model."""
+
+    is_superuser = models.BooleanField(_('superuser status'), default=False,
+        help_text=_('Designates that this user has all permissions without '
+                    'explicitly assigning them.'))
+    groups = models.ManyToManyField(Group, verbose_name=_('groups'),
+        blank=True, help_text=_('The groups this user belongs to. A user will '
+                                'get all permissions granted to each of '
+                                'his/her group.'),
+        related_name="emailuser_set", related_query_name="emailuser")
+    user_permissions = models.ManyToManyField(Permission,
+        verbose_name=_('user permissions'), blank=True,
+        help_text=_('Specific permissions for this user.'),
+        related_name="emailuser_set", related_query_name="emailuser")
+
+    class Meta:
+        abstract = True
+
+
+permission_mixin = (PermissionsMixin
+    if settings.AUTH_USER_MODEL == 'emailuser.User' else CoextantPermissionsMixin)
+
+
+class User(AbstractBaseUser, permission_mixin):
 
     """A Django User object with no username, just an email address."""
 
