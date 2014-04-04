@@ -5,7 +5,7 @@ setup(
     name='django-emailuser',
     version='1.0',
     description='simple User model identified by email address',
-    packages=['emailuser'],
+    packages=['emailuser', 'emailuser.management', 'emailuser.management.commands'],
 
     author='Mark Paschal',
     author_email='markpasc@markpasc.org',
